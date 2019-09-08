@@ -1,0 +1,24 @@
+
+#app table, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+#app td {
+    height: 24px;
+    width: 24px;
+
+    font-family: monospace;
+    font-size: 20px;
+
+    text-align: center;
+    align-content: center;
+
+    user-select: none;
+
+    color: blue;
+}
+
+#app td.is-default {
+    color: black;
+}

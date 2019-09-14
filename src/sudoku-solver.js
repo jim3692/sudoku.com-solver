@@ -75,12 +75,19 @@ module.exports = function (table) {
         if (this.board.zerosLeft) {
           if (!preciseSolve(this.board)) {
             clearInterval(interval)
-            resolve()
+            const possibleValues = [...Array(9)].map((_, rowIndex) => this.board.getRow(rowIndex).map(cell => {
+              if (cell.possibleValues && cell.possibleValues.size) {
+                return [...cell.possibleValues]
+              } else {
+                return [cell.value]
+              }
+            }))
+            resolve({ possibleValues })
           }
         } else {
           clearInterval(interval)
           const solution = [...Array(9)].map((_, rowIndex) => this.board.getRow(rowIndex).map(cell => cell.value))
-          resolve(solution)
+          resolve({ solution })
         }
       } catch (err) {
         clearInterval(interval)

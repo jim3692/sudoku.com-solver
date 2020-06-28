@@ -1,7 +1,9 @@
 # sudoku.com-solver
 Sudoku Solver that integrates with sudoku.com
 
-# Setup
+[Solver Demo](https://jim3692.github.io/sudoku.com-solver/demo/)
+
+# Setup for sudoku.com
 1. Install [Script Injector]( https://chrome.google.com/webstore/detail/script-injector/ndndddaojfijpbgnjbgeledkmlfaekba) to Chrome
 2. Add `https://cdn.jsdelivr.net/gh/jim3692/sudoku.com-solver/build/sudoku.com-bundle.js` to the Script Injector scripts list
     

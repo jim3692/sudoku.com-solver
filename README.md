@@ -4,6 +4,13 @@ Sudoku Solver that integrates with sudoku.com
 [Solver Demo](https://jim3692.github.io/sudoku.com-solver/demo/)
 
 # Setup for sudoku.com
+
+#### Warning! Script Injector does not exist in Chrome Web Store anymore.
+The script can also be loaded from Chrome, or Firefox, console with this call:
+```js
+fetch('https://cdn.jsdelivr.net/gh/jim3692/sudoku.com-solver/build/sudoku.com-bundle.js').then(res => res.text()).then(js => eval(js))
+```
+
 1. Install [Script Injector]( https://chrome.google.com/webstore/detail/script-injector/ndndddaojfijpbgnjbgeledkmlfaekba) to Chrome
 2. Add `https://cdn.jsdelivr.net/gh/jim3692/sudoku.com-solver/build/sudoku.com-bundle.js` to the Script Injector scripts list
     

@@ -1,19 +1,19 @@
-/* global $ */
-const parser = require('./sudoku.com-parser')
+/* global $, gameScene */
 const SudokuSolver = require('./sudoku-solver')
 
 const solveButton = $('<button>Solve</button>')
 solveButton.css('float', 'right')
 solveButton.click(() => {
-  const parsed = parser()
-  const solver = new SudokuSolver(parsed)
+  const board = gameScene.cellsGroup.children.entries
+    .map(e => e.dataValue._text)
+    .map(v => parseInt(v || 0))
+    .map((_, i, cells) => cells.slice(i * 9, (i + 1) * 9))
+
+  const solver = new SudokuSolver(board)
   solver.solve()
     .then(({ possibleValues, solution }) => {
       let i = 0
       let busy = false
-      const notes = $('.game-controls-item.game-controls-pencil').first()
-      const sudokuWrapper = $('#sudoku-wrapper')
-      const notesActive = () => sudokuWrapper.hasClass('pencil-mode')
 
       const asyncTask = async cb => {
         busy = true
@@ -24,31 +24,14 @@ solveButton.click(() => {
         busy = false
       }
 
-      const cells = $('.game-cell')
       const fill = setInterval(async () => {
         if (busy) {
           return
         }
 
-        cells.get(i).click()
+        gameScene.setActiveCell(i)
 
-        if (possibleValues) {
-          const currentValues = possibleValues[Math.floor(i / 9)][Math.floor(i % 9)]
-
-          if (currentValues.length > 0) {
-            if (!notesActive()) {
-              await asyncTask(() => notes.click())
-            }
-
-            for (const val of currentValues) {
-              await asyncTask(() => $.event.trigger({ type: 'keydown', which: val.toString().charCodeAt(0) }))
-            }
-          }
-        } else {
-          if (notesActive()) {
-            await asyncTask(() => notes.click())
-          }
-
+        if (!possibleValues) {
           const val = solution[Math.floor(i / 9)][Math.floor(i % 9)]
           await asyncTask(() => $.event.trigger({ type: 'keydown', which: val.toString().charCodeAt(0) }))
         }
@@ -59,4 +42,4 @@ solveButton.click(() => {
       }, 1)
     })
 })
-solveButton.appendTo($('#masthead > .content-wrapper').get(0))
+solveButton.prependTo($('#masthead .new-game-button-wrapper').get(0))

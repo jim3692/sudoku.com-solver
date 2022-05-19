@@ -1,13 +1,18 @@
-/* global $, gameScene */
+/* global gameScene */
 const SudokuSolver = require('./sudoku-solver')
 
-const solveButton = $('<button>Solve</button>')
-solveButton.css('float', 'right')
-solveButton.click(() => {
+const canvas = document.querySelector('#game canvas')
+
+const solveButton = document.createElement('button')
+solveButton.innerHTML = 'Solve'
+solveButton.style.float = 'right'
+
+solveButton.addEventListener('click', () => {
   const board = gameScene.cellsGroup.children.entries
-    .map(e => e.dataValue._text)
+    .map(e => e.dataValue)
     .map(v => parseInt(v || 0))
     .map((_, i, cells) => cells.slice(i * 9, (i + 1) * 9))
+    .slice(0, 9)
 
   const solver = new SudokuSolver(board)
   solver.solve()
@@ -33,7 +38,11 @@ solveButton.click(() => {
 
         if (!possibleValues) {
           const val = solution[Math.floor(i / 9)][Math.floor(i % 9)]
-          await asyncTask(() => $.event.trigger({ type: 'keydown', which: val.toString().charCodeAt(0) }))
+          await asyncTask(() => canvas.dispatchEvent(
+            new window.KeyboardEvent(
+              'keydown',
+              { keyCode: val.toString().charCodeAt(0), bubbles: true }
+            )))
         }
 
         if (++i >= 81) {
@@ -42,4 +51,6 @@ solveButton.click(() => {
       }, 1)
     })
 })
-solveButton.prependTo($('#masthead .new-game-button-wrapper').get(0))
+
+document.querySelector('#masthead > .content-wrapper')
+  .appendChild(solveButton)
